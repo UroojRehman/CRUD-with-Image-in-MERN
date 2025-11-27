@@ -67,7 +67,7 @@ export const getProductById = async (req, res) =>{
 //Update Product
 export const updateProduct = async (req, res) =>{
     try {
-        const {name, price} = req.cody;
+        const {name, price} = req.body;
         const p = await product.findById(req.params.id);
         if(!p){
             if(req.file){
@@ -79,7 +79,7 @@ export const updateProduct = async (req, res) =>{
         // Delete old image if new image is uploaded
         if(req.file){
             if(p.imageUrl){
-                const oldImageFilename = p.imageUrl.split('/')[1];
+                const oldImageFilename = p.imageUrl.split('/').pop();
                 if(oldImageFilename){
                     await fs.unlink(path.join(__dirname, '../uploads/', oldImageFilename)).catch(()=>{})
      
@@ -88,7 +88,31 @@ export const updateProduct = async (req, res) =>{
             }
             p.imageUrl = getImageUrl(req, req.file.filename);
         }
+        if(name) p.name = name;
+        if(price) p.price = price;
     } catch (error) {
-        
+        if(req.file){
+            await fs.unlink(path.join(__dirname, '../uploads/', req.file.filename));
+            res.status(500).json({success: false, message: error.message});
+        }
+    }
+};
+
+//Delete Product
+export const deleteProduct = async(req, res)=>{
+    try {
+        const p = await product.findByIdAndDelete(req.params.id);
+        if(!p){
+            return res.status(404).json({success:false, message: "Product not found"});
+        }
+        if(p.imageUrl){
+            const filename = p.imageUrl.split('/').pop();
+            if(filename){
+                await fs.unlink(path.join(__dirname,'../uploads/', filename)).catch(()=>{})
+            }
+        }
+        res.status(200).json({success:true, message: "Product deleted successfully"});
+    } catch (error) {
+        res.status(500).json({success:false, messsage: error.message});
     }
 }
