@@ -23,13 +23,13 @@ export const createProduct = async (req, res) =>{
 
         }
         const imageUrl = req.file ? getImageUrl(req, req.file.filename) : null;
-        const product = await product.create({
+        const newproduct = await product.create({
             name,
             price,
             imageUrl
         });
 
-        res.status(201).json({success:true, data: product});
+        res.status(201).json({success:true, data: newproduct});
         
     } catch (error) {
         if(req.file){
