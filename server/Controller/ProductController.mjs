@@ -11,6 +11,7 @@ const getImageUrl = (req, filename) =>{
 }
 
 //Create Product
+//http://localhost:3000/project/products
 export const createProduct = async (req, res) =>{
     try {
 
@@ -40,7 +41,7 @@ export const createProduct = async (req, res) =>{
 }
 
 //Get All Products
-
+//http://localhost:3000/project/getproducts
 export const getAllProducts = async (req, res) =>{
     try {
        const products = await product.find();
