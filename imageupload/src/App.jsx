@@ -2,54 +2,37 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import axios from 'axios'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { createBrowserRouter } from "react-router";
+import { RouterProvider } from "react-router/dom";
+import GetProduct from './AdminPages/GetProduct/GetProduct';
+import AddProduct from './AdminPages/AddProduct/AddProduct';
+
+
+
 
 function App() {
-   const [name, setName] = useState('');
-   const [price, setPrice] = useState('');
-   const [image, setImage] = useState(null);
+   const router = createBrowserRouter([
+  {
+    path: "/",
+    Component: GetProduct  },
+    {
+      path: "/add-product",
+      Component: AddProduct
+    },
+    
+]);
 
-   const handleSubmit = async(e) =>{
-    e.preventDefault();
+const root = document.getElementById("root");
 
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("price", price);
-    formData.append("image", image);
-    try {
-      const res = await axios.post('http://localhost:3000/api/products', formData,{
-        headers:{
-          "Content-Type": "multipart/form-data"
-        }
-      });
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-   }
-
+ReactDOM.createRoot(root).render(
+  <RouterProvider router={router} />,
+);
 
   return (
     <>
-      <div className='container'>
-        <div className="row">
-          <h1 className='text-center'>Add New Product</h1>
-          <div className="col-6 offset-3">
-            <form >
-              <div className="form-group">
-                <label htmlFor="" >ProductName</label>
-              <input className='form-control' type="text" onChange={(e)=>setName(e.target.value)}/>
-              </div>
-              <label htmlFor="">ProductPrice</label>
-              <input className='form-control' type="text" onChange={(e)=>setPrice(e.target.value)} />
-              <label htmlFor="">ProductImage</label>
-              <input className='form-control' type="file" accept='image/' onChange={(e)=>setImage(e.target.files[0])}/>
-              <input className='btn btn-success' type="submit" value="Add Product" onClick={handleSubmit}/>
-            </form>
-          </div>
-        </div>
-
-      </div>
+      
     </>
   )
 }

@@ -1,10 +1,9 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 import axios from 'axios'
+import { useNavigate } from 'react-router';
 
-function App() {
+function AddProduct() {
+  const navigate = useNavigate();
    const [name, setName] = useState('');
    const [price, setPrice] = useState('');
    const [image, setImage] = useState(null);
@@ -23,6 +22,7 @@ function App() {
         }
       });
       console.log(res.data);
+      navigate('/');
     } catch (error) {
       console.log(error);
     }
@@ -54,4 +54,4 @@ function App() {
   )
 }
 
-export default App
+export default AddProduct
